@@ -1,11 +1,10 @@
-n = int(input())
-sol = [0] * n
-if n == 1:
-    print(1%10007)
-else:
-    sol[0] = 1
-    sol[1] = 2
-    for i in range(2, n):
-        sol[i] = sol[i-1] + sol[i-2]
+import sys
+input = sys.stdin.readline
 
-    print(sol[n-1]%10007)
+n = int(input())
+
+dp = [0, 1, 2]
+for i in range(3, n+1):
+    dp.append(dp[i-1] + dp[i-2])
+
+print(dp[n]%10007)
