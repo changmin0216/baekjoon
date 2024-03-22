@@ -1,6 +1,13 @@
+import sys
+input = sys.stdin.readline
+
 n = int(input())
 ary = list(map(int, input().split()))
+
+dp = ary
+
 for i in range(1, n):
-    ary[i] = max(ary[i], ary[i] + ary[i-1])
-answer = max(ary)
-print(answer)
+    if dp[i-1] + dp[i] > dp[i]:
+        dp[i] = dp[i-1] + dp[i]
+
+print(max(dp))
