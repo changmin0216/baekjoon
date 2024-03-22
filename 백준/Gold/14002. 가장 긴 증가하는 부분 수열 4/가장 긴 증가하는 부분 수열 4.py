@@ -9,16 +9,21 @@ for i in range(n):
     dp[i].append(a[i])
 
 for i in range(1, n):
-    temp = 0
+    temp = dp[i][0]
+    # temp = 0
     temp_i = i
     chk = False
     for j in range(i):
         if a[i] > a[j]:
             chk = True
-            if temp < max(dp[i][0], dp[j][0]+1):
-                temp = max(dp[i][0], dp[j][0]+1)
+            if temp < dp[j][0]+1:
+                temp = dp[j][0]+1
                 temp_i = j
-                dp[i][0] = temp
+    dp[i][0] = temp
+            # if temp < max(dp[i][0], dp[j][0]+1):
+            #     temp = max(dp[i][0], dp[j][0]+1)
+            #     temp_i = j
+            #     dp[i][0] = temp
     if chk:
         for v in dp[temp_i][1:]:
             dp[i].append(v)
