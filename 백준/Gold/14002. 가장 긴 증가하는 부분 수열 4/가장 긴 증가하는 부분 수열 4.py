@@ -10,8 +10,6 @@ for i in range(n):
 
 for i in range(1, n):
     temp = dp[i][0]
-    # temp = 0
-    temp_i = i
     chk = False
     for j in range(i):
         if a[i] > a[j]:
@@ -20,10 +18,6 @@ for i in range(1, n):
                 temp = dp[j][0]+1
                 temp_i = j
     dp[i][0] = temp
-            # if temp < max(dp[i][0], dp[j][0]+1):
-            #     temp = max(dp[i][0], dp[j][0]+1)
-            #     temp_i = j
-            #     dp[i][0] = temp
     if chk:
         for v in dp[temp_i][1:]:
             dp[i].append(v)
