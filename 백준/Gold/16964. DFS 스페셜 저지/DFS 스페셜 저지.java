@@ -20,11 +20,11 @@ public class Main {
         flag = true;
         idx = 1;
 
-        for (int i = 0; i <= n; ++i) {
+        for (int i = 0; i <= n; i++) {
             adj.add(new ArrayList<Integer>());
         }
 
-        for (int i = 0; i < n - 1; ++i) {
+        for (int i = 0; i < n - 1; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
