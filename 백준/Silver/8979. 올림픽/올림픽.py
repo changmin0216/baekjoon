@@ -5,13 +5,12 @@ n, k = map(int, input().split())
 
 medal = []
 
-for i in range(4):
+for i in range(n):
     a, b, c, d = map(int, input().split())
     if a==k:
         g, s, bronze = b, c, d
+        continue
     medal.append([a, b, c, d])
-
-# medal.sort(key=lambda x:x[1], reverse=True)
 
 cnt = 0
 for i in medal:
@@ -20,13 +19,15 @@ for i in medal:
         cnt+=1
 
 for i in medal:
-    if i[2]>s:
+    if i[2]>s and i[1]==g:
         medal.remove(i)
         cnt+=1
 
 for i in medal:
-    if i[3]>bronze:
+    if i[3]>bronze and i[1]==g and i[2]==s:
         medal.remove(i)
         cnt+=1
 
-print(cnt)
+print(cnt+1)
+
+
