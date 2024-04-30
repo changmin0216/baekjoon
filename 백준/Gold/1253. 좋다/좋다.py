@@ -1,3 +1,25 @@
+def binary_search(arr, target, index):
+    left = 0
+    right = len(arr)-1
+
+    while left < right:
+        temp = arr[left] + arr[right]
+
+        if temp==target:
+            if left == index:
+                left+=1
+                continue
+            elif right == index:
+                right-=1
+                continue
+            else:
+                return True
+        elif temp > target:
+            right-=1
+        else:
+            left+=1
+
+    return False
 import sys
 input = sys.stdin.readline
 
@@ -7,21 +29,7 @@ array.sort()
 
 result = 0
 for i in range(n):
-    target = array[i]
-    start = 0
-    end = n-1
-    while start < end:
-        if array[start] + array[end] == target:
-            if start==i: # 만약 자기 자신이면
-                start+=1
-            elif end==i: # 만약 자기 자신이면
-                end-=1
-            else:
-                result+=1
-                break
+    if binary_search(array, array[i], i):
+        result+=1
 
-        elif array[start] + array[end] > target:
-            end-=1
-        else:
-            start+=1
 print(result)
