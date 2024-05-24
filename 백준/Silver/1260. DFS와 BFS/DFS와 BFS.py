@@ -1,54 +1,48 @@
 import sys
-input = sys.stdin.readline
 from collections import deque
+input = sys.stdin.readline
+
 n, m, v = map(int, input().split())
 
-arr = [[] for _ in range(n+1)]
+map_ = [[] for _ in range(n+1)]
 
 for _ in range(m):
     a, b = map(int, input().split())
-    arr[a].append(b)
-    arr[b].append(a)
+    map_[a].append(b)
+    map_[b].append(a)
 
-for i in range(n+1):
-    arr[i].sort()
 
-visited_1 = [False]*(n+1)
+q = deque()
 
-result_1 = []
-def dfs(k):
-    if not visited_1[k]:
-        visited_1[k] = True
-        result_1.append(k)
-    if len(result_1) == n:
-        return
-    for value in arr[k]:
-        if not visited_1[value]:
-            visited_1[value] = True
-            result_1.append(value)
-            dfs(value)
+for i in range(len(map_)):
+    map_[i].sort()
+
+visited = [False] * (n+1)
+def dfs(start):
+    for v in map_[start]:
+        if not visited[v]:
+            print(v, end=' ')
+            visited[v] = True
+            dfs(v)
     return
+
+print(v, end=' ')
+visited[v] = True
 dfs(v)
-print(*result_1)
+print()
+visited = [False] * (n+1)
+def bfs(start):
+    print(start, end=' ')
+    visited[start] = True
+    q.append(start)
 
-
-visited = [False]*(n+1)
-result = []
-queue = deque()
-def bfs(k):
-    if not visited[k]:
-        queue.append(k)
-    while queue:
-        q = queue.popleft()
-        if visited[q]:
-            continue
-        result.append(q)
-        visited[q] = True
-        if len(result) == n:
-            return
-        for value in arr[q]:
-            if not visited[value]:
-                queue.append(value)
+    while q:
+        a = q.popleft()
+        for v in map_[a]:
+            if not visited[v]:
+                print(v, end=' ')
+                visited[v] = True
+                q.append(v)
+    return
 
 bfs(v)
-print(*result)
