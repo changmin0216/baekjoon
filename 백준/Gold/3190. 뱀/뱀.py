@@ -1,53 +1,65 @@
 import sys
-input = sys.stdin.readline
 from collections import deque
+input = sys.stdin.readline
 
-N = int(input())
-K = int(input())
+n = int(input()) #보드의 크기
+k = int(input()) #사과의 개수
 
-graph = [[0 for _ in range(N+1)] for _ in range(N+1)]
+board = [[0 for _ in range(n)] for _ in range(n)]
 
-for _ in range(K):
-    y, x = map(int, input().split())
-    graph[y][x] = 1 #사과위치
+for _ in range(k):
+    a, b = map(int, input().split())
+    board[a-1][b-1] = 1
 
-L = int(input())
-direction = deque()
-for _ in range(L):
-    X, C = input().split()
-    direction.append((int(X), C))
+l = int(input())
 
-#동 남 서 북
-dx = [1,0,-1,0]
-dy = [0,1,0,-1]
+change_direction = deque()
 
-snake = deque([(1,1)])
+for _ in range(l):
+    change_direction.append(list(map(str, input().split())))
 
-d = 0 #초기 방향
-y, x = 1, 1
-graph[y][x] = 2 #뱀의 초기위치
+dx = [1, 0, -1, 0]
+dy = [0, 1, 0, -1]
+
+direction = 0
+
+snake = deque()
+snake.append([0,0])
+
 time = 0
 while True:
-    ny, nx = y + dy[d], x + dx[d]
-    if ny<=0 or ny>N or nx<=0 or nx>N or (ny, nx) in snake:
-        break
-    if graph[ny][nx]!=1: #사과가 없으면
-        a, b = snake.popleft() #몸길이 줄인다
-        graph[a][b] = 0 #그 위치를 0으로
-    y, x = ny, nx
-    graph[y][x] = 2 #뱀이 위치한 곳
-    snake.append((y, x))
-    time+=1
 
-    # 시간에 해당하는 방향전환 정보가 있을 경우
-    if len(direction)!=0:
-        if time == direction[0][0]:
-            if direction[0][1] == 'D': #오른쪽으로 90
-                d = (d + 1) % 4
-            else:
-                if d == 0:
-                    d = 3
-                else:
-                    d -= 1
-            direction.popleft()
-print(time + 1)
+    ey, ex = snake[-1]
+
+    ny, nx = ey + dy[direction], ex + dx[direction]
+
+    if 0 > nx or nx >= n or 0 > ny or ny >= n:
+        break
+
+    if [ny, nx] in snake:
+        break
+
+    if board[ny][nx] == 1: ## 사과가 있으면
+        board[ny][nx]=0
+    else: ##사과가 없으면
+        snake.popleft()
+
+    snake.append([ny, nx])
+
+    time+=1
+    if change_direction:
+        if str(time) == change_direction[0][0]:
+            if change_direction[0][1] == 'D': ## 오른쪽으로 90도
+                direction = (direction + 1)%4
+            else: ## 왼쪽으로 90도
+                direction = (direction - 1)
+                if direction == -1:
+                    direction = 3
+
+            change_direction.popleft()
+
+    # print(time-1,"초가 끝난 후 ")
+    # print(snake)
+    # print(direction)
+
+print(time+1)
