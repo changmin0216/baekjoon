@@ -37,7 +37,7 @@ def bfs(y, x, num, crtt):
     while q:
         ey, ex = q.popleft()
         for i in range(4):
-            ny, nx = ey + dy[i], ex + dx[i],
+            ny, nx = ey + dy[i], ex + dx[i]
             if 0<=ny<n and 0<=nx<m and arr[ny][nx]!=0 and crtt[ny][nx]==0:
                 crtt[ny][nx] = num
                 q.append((ny, nx))
@@ -47,17 +47,29 @@ def bfs(y, x, num, crtt):
 year = 0
 while True:
     year+=1
-    tw = copy.deepcopy(ice)
-    c = []
-    for i in tw:
-        c.append(melt(i[0], i[1]))
+    # tw = copy.deepcopy(ice)
+    # c = []
+    # for i in tw:
+    #     c.append(melt(i[0], i[1]))
+    # 
+    # for i in range(len(c)):
+    #     if arr[tw[i][0]][tw[i][1]] <= c[i]:
+    #         arr[tw[i][0]][tw[i][1]] = 0
+    #         ice.remove((tw[i][0], tw[i][1]))
+    #     else:
+    #         arr[tw[i][0]][tw[i][1]]-=c[i]
 
-    for i in range(len(c)):
-        if arr[tw[i][0]][tw[i][1]] <= c[i]:
-            arr[tw[i][0]][tw[i][1]] = 0
-            ice.remove((tw[i][0], tw[i][1]))
+    melt_amounts = [melt(y, x) for y, x in ice]
+
+    # 빙산의 높이 감소 처리
+    new_ice = []
+    for idx, (y, x) in enumerate(ice):
+        if arr[y][x] <= melt_amounts[idx]:
+            arr[y][x] = 0
         else:
-            arr[tw[i][0]][tw[i][1]]-=c[i]
+            arr[y][x] -= melt_amounts[idx]
+            new_ice.append((y, x))  # 남아있는 빙산만 새로운 리스트에 추가
+    ice = new_ice
 
     if not ice:
         print(0)
