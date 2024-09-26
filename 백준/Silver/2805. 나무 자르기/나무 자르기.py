@@ -4,7 +4,7 @@ input = sys.stdin.readline
 n, m = map(int, input().split())
 arr = list(map(int, input().split()))
 
-left = 0
+left = 1
 right = max(arr)
 
 result = 0
