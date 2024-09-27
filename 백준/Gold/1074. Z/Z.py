@@ -1,30 +1,22 @@
-import sys
-input = sys.stdin.readline
-
-def dc(x, y, n):
-    global cnt
-    if x > r or x + n <= r or y > c or y + n <= c:
-        cnt += n ** 2
-        return
-
-    if n > 2:
-        n //= 2
-        dc(x, y, n)
-        dc(x, y + n, n)
-        dc(x + n, y, n)
-        dc(x + n, y + n, n)
-    else:
-        if x == r and y == c:
-            print(cnt)
-        elif x == r and y + 1 == c:
-            print(cnt + 1)
-        elif x + 1 == r and y == c:
-            print(cnt + 2)
-        else:
-            print(cnt + 3)
-        sys.exit()
-
-
 n, r, c = map(int, input().split())
-cnt = 0
-dc(0, 0, 2 ** n)
+
+def find_z_order(n, r, c):
+    result = 0
+    size = 2 ** n
+    while size > 1:
+        size //= 2
+        if r < size and c < size:  # 1사분면
+            pass
+        elif r < size and c >= size:  # 2사분면
+            result += size * size
+            c -= size
+        elif r >= size and c < size:  # 3사분면
+            result += 2 * size * size
+            r -= size
+        else:  # 4사분면
+            result += 3 * size * size
+            r -= size
+            c -= size
+    print(result)
+
+find_z_order(n, r, c)
