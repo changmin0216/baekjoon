@@ -2,21 +2,21 @@ import sys
 input = sys.stdin.readline
 
 n, m = map(int, input().split())
-knowList = set(input().split()[1:])
+true_list = set(input().split()[1:])
 
 party = []
 
 for _ in range(m):
     party.append(set(input().split()[1:]))
-    
+
 for _ in range(m):
     for p in party:
-        if p & knowList:
-            knowList = knowList.union(p)
+        if p & true_list:
+            true_list = true_list.union(p)
 
 cnt = 0
 for p in party:
-    if p & knowList:
+    if p & true_list:
         continue
     cnt += 1
 
