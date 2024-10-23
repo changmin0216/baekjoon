@@ -1,47 +1,23 @@
 import sys
-from collections import deque
 input = sys.stdin.readline
 
-n = int(input())
-m = int(input())
-s = input().rstrip()
+n = int(input())  # Pn의 반복 횟수
+m = int(input())  # 문자열의 길이
+s = input().rstrip()  # 입력 문자열
 
-p = ''
-for i in range(n+1):
-    if i==n:
-        p+='I'
+cnt = 0  # Pn 패턴의 개수를 저장
+pattern_count = 0  # 연속된 'IOI' 패턴의 개수
+i = 0  # 탐색 인덱스
+
+# 문자열 전체를 한 번 순회
+while i < m - 1:
+    if s[i:i + 3] == 'IOI':  # 'IOI' 패턴을 찾으면
+        pattern_count += 1  # 패턴 길이를 증가
+        if pattern_count >= n:
+            cnt += 1  # Pn 패턴 발견
+        i += 2  # 'IO'를 건너뛰고 다음 'I'에서 시작
     else:
-        p+='IO'
+        pattern_count = 0  # 패턴이 끊기면 초기화
+        i += 1  # 다음 문자로 이동
 
-cnt = 0
-
-start = 0
-end = 0
-
-q = deque()
-q.append(s[0])
-while end<m and start<=end:
-    if s[end]!='I':
-        end+=1
-        if end<m:
-            q.append(s[end])
-    else: # s[end]=='I'
-        if s[start]!='I':
-            start+=1
-            q.popleft()
-        else: # s[end] == 'I' and s[start] == 'I'
-            if len(q)==len(p):
-                if ''.join(q) == p:
-                    cnt+=1
-                end+=1
-                if end < m:
-                    q.append(s[end])
-            else: #둘다 i긴 한데 길이가 다른 경우
-                if len(q) < len(p):
-                    end+=1
-                    if end < m:
-                        q.append(s[end])
-                else:
-                    start+=1
-                    q.popleft()
 print(cnt)
