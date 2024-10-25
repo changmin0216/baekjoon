@@ -3,9 +3,6 @@ from collections import defaultdict, deque
 input = sys.stdin.readline
 
 n, m = map(int, input().split())
-
-visited = [False] * (n+1)
-
 degree = [0 for _ in range(n+1)]
 g = [[] for _ in range(n+1)]
 for _ in range(m):
@@ -27,4 +24,7 @@ while q:
         degree[i]-=1
         if degree[i] == 0:
             q.append(i)
-print(' '.join(map(str, answer)))
+if len(answer)!=n:
+    print("사이클 발생")
+else:
+    print(' '.join(map(str, answer)))
