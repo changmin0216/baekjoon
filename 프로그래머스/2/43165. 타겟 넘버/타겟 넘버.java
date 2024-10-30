@@ -1,25 +1,25 @@
-class Solution {
-    static int answer;
-    static int[] number;
-    static int size;
-    public int solution(int[] numbers, int target) {
-        answer = 0;
-        number = numbers;
-        size = numbers.length;
+import java.util.*;
+import java.io.*;
 
-        dfs(0, 0, target);
-        return answer;
+class Solution {
+    static int len;
+    static int result = 0;
+    static int target_num;
+    public static int solution(int[] numbers, int target) {
+        len = numbers.length;
+        target_num = target;
+        dfs(0, 0, numbers);
+        return result;
     }
 
-    public void dfs(int depth, int sum, int target){
-        if (depth==size){
-            if (sum==target){
-                answer++;
+    private static void dfs(int num, int depth, int[] numbers) {
+        if (depth == len) {
+            if (num==target_num){
+                result+=1;
             }
             return;
         }
-
-        dfs(depth+1, sum+number[depth], target);
-        dfs(depth+1, sum-number[depth], target);
+        dfs(num + numbers[depth], depth + 1, numbers);
+        dfs(num - numbers[depth], depth + 1, numbers);
     }
 }
