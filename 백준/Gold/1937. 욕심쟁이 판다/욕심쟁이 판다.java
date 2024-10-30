@@ -1,3 +1,5 @@
+
+
 import java.util.*;
 import java.io.*;
 public class Main {
@@ -43,9 +45,19 @@ public class Main {
             nx = x + dx[i];
 
             if (0<=ny && ny<n && 0<=nx && nx<n){
+//                if (graph[ny][nx] > graph[y][x]) { //만약 이미 방문한 곳이면??? 굳이 여기서 또 dfs를 돌릴 필요가 있나?
+//                    dp[y][x] = Math.max(dp[y][x], dfs(ny, nx)+1);
+//                    dfs(ny, nx);
+//                }
+
                 if (graph[ny][nx] > graph[y][x]) {
-                    dp[y][x] = Math.max(dp[y][x], dfs(ny, nx)+1);
-                    dfs(ny, nx);
+                    if (dp[ny][nx] != -1) {
+                        dp[y][x] = Math.max(dp[ny][nx] + 1, dp[y][x]);
+                    }
+                    else{
+                        dp[y][x] = Math.max(dp[y][x], dfs(ny, nx) + 1);
+//                        dfs(ny, nx); // 왜 또 dfs를 도는거지?
+                    }
                 }
             }
         }
