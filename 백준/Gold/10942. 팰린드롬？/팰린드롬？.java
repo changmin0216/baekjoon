@@ -40,16 +40,14 @@ public class Main {
             }
         }
         int m = Integer.parseInt(br.readLine());
-//        for (int i = 0; i < m;i++) {
-//            String[] s = br.readLine().split(" ");
-//            System.out.println(dp[Integer.parseInt(s[0])][Integer.parseInt(s[1])]);
-//        }
+
         StringBuilder sb = new StringBuilder();
-        while(m --> 0 ){
+        while(m > 0 ){
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
             sb.append(dp[a][b]).append("\n");
+            m--;
         }
 
         System.out.println(sb);
