@@ -16,7 +16,7 @@ public class Main {
         }
         int[][] dp = new int[n + 1][n + 1];
 
-        for (int j = 1; j < n + 1; j++) {
+        for (int j = 1; j < n + 1; j++) { // 열 먼저 확인
             for (int i = 1; i < j+1; i++) {
                 if (i==j) {
                     dp[i][j] = 1;
