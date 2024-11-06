@@ -1,12 +1,9 @@
-
-
 import java.io.*;
 import java.util.*;
 public class Main {
     static int t, n, k, w;
     static int[] delay;
     static int[] indegree;
-//    static Queue<Node> q;
     static ArrayList<ArrayList<Integer>> graph;
     static StringBuilder sb;
 
@@ -48,46 +45,10 @@ public class Main {
         }
         System.out.println(sb);
     }
-//    private static void topology_sort() {
-//        Queue<Integer> q = new LinkedList<>();
-//        int[] dp = new int[n + 1];  // 각 노드까지 걸린 시간을 기록하는 배열
-//        for (int i = 1; i < n + 1; i++) {
-//            if (indegree[i] == 0) {
-//                q.offer(i);
-//            }
-//        }
-//
-//        int time = 0;
-//        while (!q.isEmpty()) {
-//            int max = -1;
-//            int size = q.size();
-//            for (int i = 0; i < size; i++) {
-//                int now = q.poll();
-//
-//                if (now == w) {
-//                    sb.append((time + delay[now])).append("\n");
-//                    return;
-//                }
-//
-//                max = Math.max(max, delay[now]);
-//
-//                for (int next : graph.get(now)) {
-//                    indegree[next]-=1;
-//                    dp[next] = Math.max(dp[next], dp[now] + delay[next]);
-//                    if (indegree[next] == 0) {
-//                        q.offer(next);
-//                    }
-//                }
-//            }
-//            time+=max;
-//        }
-//    }
-
     private static void topology_sort() {
         Queue<Integer> q = new LinkedList<>();
-        int[] dp = new int[n + 1];  // 각 노드까지 걸린 시간을 기록하는 배열
+        int[] dp = new int[n + 1];
 
-        // 초기 설정
         for (int i = 1; i < n + 1; i++) {
             dp[i] = delay[i];
             if (indegree[i] == 0) {
@@ -101,7 +62,6 @@ public class Main {
             for (int next : graph.get(now)) {
                 indegree[next]--;
 
-                // `next`까지 걸린 시간을 업데이트
                 dp[next] = Math.max(dp[next], dp[now] + delay[next]);
 
                 if (indegree[next] == 0) {
@@ -110,7 +70,6 @@ public class Main {
             }
         }
 
-        // 목표 노드 `w`까지 걸린 시간을 출력
         sb.append(dp[w]).append("\n");
     }
 }
