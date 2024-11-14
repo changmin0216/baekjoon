@@ -1,10 +1,8 @@
 import sys
 input = sys.stdin.readline
 
-# 입력
 n, l = map(int, input().split())
 
-# 탐색
 for i in range(l, 101):
     ix = n - (i*(i+1)//2)
     if ix%i==0:
