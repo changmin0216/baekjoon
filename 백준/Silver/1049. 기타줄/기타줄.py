@@ -2,28 +2,19 @@ import sys
 input = sys.stdin.readline
 
 n, m = map(int, input().split())
-bundle = []
-each = []
 
+brand = []
 for _ in range(m):
-    a, b = map(int, input().split())
-    bundle.append(a)
-    each.append(b)
+    brand.append(list(map(int, input().split())))
 
-min_bundle = min(bundle)
-min_each = min(each)
+bundle = sorted(brand, key=lambda x: x[0])
+each = sorted(brand, key=lambda x: x[1])
 
-ans = 0
-while n > 0:
-    if n >= 6:
-        min_single = min_each*6
-        n -= 6
-    else:
-        min_single = min_each*n
-        n -= n
-    if min_single < min_bundle:
-        ans += min_single
-    else:
-        ans += min_bundle
+if bundle[0][0] <= each[0][1]*6:
+    answer = bundle[0][0] * (n//6) + each[0][1] * (n%6)
 
-print(ans)
+    if bundle[0][0] < each[0][1] * (n%6):
+        answer = bundle[0][0] * (n//6 + 1)
+else:
+    answer = each[0][1] * n
+print(answer)
