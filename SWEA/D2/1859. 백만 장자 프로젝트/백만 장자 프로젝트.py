@@ -14,8 +14,7 @@ for i in range(t):
         max_index = arr.index(max_val) # max_val의 첫번째 index
 
         for j in range(max_index, -1, -1):
-            if arr[j] < max_val:
-                sum+=max_val - arr[j]
+            sum+=max_val - arr[j]
 
         arr = arr[max_index+1::]
     print(f'#{i+1} {sum}')
