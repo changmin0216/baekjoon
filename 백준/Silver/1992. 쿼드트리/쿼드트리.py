@@ -9,12 +9,12 @@ for _ in range(n):
 
 def recur(y, x, n):
     tmp = graph[y][x]
-    check = True
     for i in range(y, y+n):
         for j in range(x, x+n):
             if graph[i][j] != tmp:
                 tmp = -1
                 break
+    
     if tmp==-1:
         print('(', end='')
 
