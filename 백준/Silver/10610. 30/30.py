@@ -7,14 +7,13 @@ n = input().rstrip()
 if '0' not in n:
     print(-1)
 else:
-    num_sum = 0 # 각 자릿수의 합
+    sum_ = 0 # 각 자릿수의 합
     for i in range(len(n)):
-        num_sum += int(n[i])
+        sum_ += int(n[i])
 
-    if num_sum % 3 != 0:
+    if sum_ % 3 != 0:
         print(-1)
-
+    
     else:
-        sorted_num = sorted(n, reverse=True)
-        answer = "".join(sorted_num)
-        print(''.join(sorted_num))
+        arr = sorted(n, reverse=True)
+        print(''.join(arr))
