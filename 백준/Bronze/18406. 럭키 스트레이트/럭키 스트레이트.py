@@ -1,18 +1,20 @@
 import sys
 input = sys.stdin.readline
 
-l = list(map(str, input().rstrip()))
-length  = len(l)
+N = input().rstrip()
+
+len_ = len(N)
 
 left = 0
-for i in range(length//2):
-    left+=int(l[i])
-
 right = 0
-for i in range(length//2, length):
-    right+=int(l[i])
+
+for i in range(len_):
+    if i<len_//2:
+        left+=int(N[i])
+    else:
+        right+=int(N[i])
 
 if left == right:
-    print("LUCKY")
+    print('LUCKY')
 else:
-    print("READY")
+    print('READY')
