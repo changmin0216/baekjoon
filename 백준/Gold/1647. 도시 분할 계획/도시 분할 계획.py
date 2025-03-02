@@ -25,17 +25,17 @@ for i in range(1, n+1):
     parent[i] = i
 
 for _ in range(m):
-    a, b, c = map(int, input().split())
-    edges.append((a, b, c))
+    edges.append(list(map(int, input().split())))
+edges.sort(key = lambda x:x[2])
 
-edges.sort(key=lambda x:x[2])
-
-result = []
-
+result = 0
+arr = []
 for edge in edges:
-    a, b, cost = edge
-    if find_parent(parent, a) != find_parent(parent, b):
-        result.append(cost)
-        union_parent(parent, a, b)
+    a, b, c = edge
 
-print(sum(result)-max(result))
+    if find_parent(parent, a)!=find_parent(parent, b):
+        union_parent(parent, a, b)
+        arr.append(c)
+        result+=c
+
+print(result-max(arr))
