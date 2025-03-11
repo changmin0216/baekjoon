@@ -38,9 +38,9 @@ def dijkstra(start):
                 heapq.heappush(q, (cost, i[0], new_route))
                 root[i[0]] = new_route
 
-    for i in root[1:]:
-        if i:
-            print(i[1], end=' ')
+    for i in range(1, n+1):
+        if root[i]:
+            print(root[i][1], end=' ')
         else:
             print('-', end=' ')
     print()
