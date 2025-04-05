@@ -1,42 +1,32 @@
-import sys
-input = sys.stdin.readline
+n = int(input())
 
-n=int(input())
+graph = []
+for _ in range(n):
+    graph.append(list(map(int, input())))
 
-g = [list(map(int, input().strip())) for _ in range(n)]
+visited = [[False]*n for _ in range(n)]
+dy = [-1,1,0,0]
+dx = [0,0,-1,1]
+def dfs(y, x):
+    global cnt
+    cnt+=1
+    visited[y][x] = True
 
-dx=[1,-1,0,0]
-dy=[0,0,-1,1]
+    for i in range(4):
+        ny, nx = y+dy[i], x+dx[i],
 
-def bfs(y_,x_):
-    result = 1
-    y, x = y_, x_
-    q = [(y,x)]
-    while q:
-        ey, ex = q.pop()
-        for k in range(4):
-            ny = ey+dy[k]
-            nx = ex+dx[k]
-            if 0<=ny<n and 0<=nx<n:
-                if g[ny][nx]==1:
-                    g[ny][nx]=0
-                    result+=1
-                    q.append((ny,nx))
-    
-    return result
+        if 0<=ny<n and 0<=nx<n:
+            if graph[ny][nx]!=0 and not visited[ny][nx]:
+                dfs(ny, nx)
 
-
-cnt=0
-msize=[]
+result = []
 for i in range(n):
     for j in range(n):
-        if g[i][j] == 1:
-            cnt+=1
-            g[i][j] = 0
-            msize.append(bfs(i,j))
-
-msize.sort()
-
-print(cnt)
-for i  in range(cnt):
-    print(msize[i])
+        if graph[i][j]==1 and not visited[i][j]:
+            cnt = 0
+            dfs(i, j)
+            result.append(cnt)
+result.sort()
+print(len(result))
+for i in result:
+    print(i)
