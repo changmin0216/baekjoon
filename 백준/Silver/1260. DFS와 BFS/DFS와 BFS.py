@@ -2,47 +2,44 @@ import sys
 from collections import deque
 input = sys.stdin.readline
 
-n, m, v = map(int, input().split())
-
-map_ = [[] for _ in range(n+1)]
-
-for _ in range(m):
-    a, b = map(int, input().split())
-    map_[a].append(b)
-    map_[b].append(a)
-
-
-q = deque()
-
-for i in range(len(map_)):
-    map_[i].sort()
-
-visited = [False] * (n+1)
-def dfs(start):
-    for v in map_[start]:
-        if not visited[v]:
-            print(v, end=' ')
-            visited[v] = True
-            dfs(v)
+def dfs(node):
+    if not visited[node]:
+        print(node, end=' ')
+        visited[node] = True
+    for i in graph[node]:
+        if not visited[i]:
+            dfs(i)
     return
 
-print(v, end=' ')
-visited[v] = True
-dfs(v)
-print()
-visited = [False] * (n+1)
 def bfs(start):
-    print(start, end=' ')
-    visited[start] = True
+    print()
+    q = deque()
     q.append(start)
 
+    visited = [False] * (n+1)
+    visited[start] = True
+
     while q:
-        a = q.popleft()
-        for v in map_[a]:
-            if not visited[v]:
-                print(v, end=' ')
-                visited[v] = True
-                q.append(v)
+        now = q.popleft()
+        print(now, end=' ')
+        for next in graph[now]:
+            if not visited[next]:
+                q.append(next)
+                visited[next] = True
     return
 
+n, m, v = map(int, input().split())
+
+graph = [[] for _ in range(n+1)]
+for _ in range(m):
+    a, b = map(int, input().split())
+
+    graph[a].append(b)
+    graph[b].append(a)
+
+for i in range(n+1):
+    graph[i].sort()
+
+visited = [False] * (n+1)
+dfs(v)
 bfs(v)
