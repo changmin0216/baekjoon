@@ -4,6 +4,9 @@ from collections import deque
 
 def dfs(y, x):
     global flag
+    if flag:
+        return
+
     if abs(y - ey) + abs(x - ex) <= 1000:
         print("happy")
         flag = True
@@ -17,11 +20,9 @@ def dfs(y, x):
                 dfs(ny, nx)
     return
 
-
 def bfs():
     q = deque()
     q.append((sy, sx))
-
 
     while q:
         y, x = q.popleft()
@@ -52,9 +53,9 @@ for _ in range(t):
 
     ey, ex = map(int, input().split())
 
-    visited = [False] * (n+1)
-    bfs()
-    # flag = False
-    # dfs(sy, sx)
-    # if not flag:
-    #     print("sad")
+    visited = [False] * n
+    # bfs()
+    flag = False
+    dfs(sy, sx)
+    if not flag:
+        print("sad")
