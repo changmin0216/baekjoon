@@ -5,78 +5,61 @@ import java.util.*;
 
 public class Main {
     static int n, m, v;
-    static ArrayList<ArrayList<Integer>> graph;
+    static boolean[] visited;
+    static int[][] graph;
 
+    public static void dfs(int node) {
+        visited[node] = true;
+
+        System.out.print(node+" ");
+        for (int i = 1; i < n + 1; i++) {
+            if (graph[node][i] == 1 && !visited[i]) {
+                dfs(i);
+            }
+        }
+    }
+
+    public static void bfs(int start) {
+        visited[start] = true;
+
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(start);
+
+        while (!queue.isEmpty()) {
+            int now = queue.poll();
+            System.out.print(now+" ");
+
+            for (int i = 1; i < n + 1; i++) {
+                if (graph[now][i] == 1 && !visited[i]) {
+                    queue.add(i);
+                    visited[i] = true;
+                }
+            }
+        }
+
+    }
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] s = br.readLine().split(" ");
-        n = Integer.parseInt(s[0]);
-        m = Integer.parseInt(s[1]);
-        v = Integer.parseInt(s[2]);
+        StringTokenizer st;
 
-        graph = new ArrayList<>(n+1);
+        st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        v = Integer.parseInt(st.nextToken());
 
-        // 각 정점의 인접 리스트 초기화
-        for (int i = 0; i < n+1; i++) {
-            graph.add(new ArrayList<>());
-        }
+        graph = new int[n+1][n+1];
 
         for (int i = 0; i < m; i++) {
-            s = br.readLine().split(" ");
-            int a = Integer.parseInt(s[0]);
-            int b = Integer.parseInt(s[1]);
-
-            graph.get(a).add(b);
-            graph.get(b).add(a);
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            graph[a][b] = graph[b][a] = 1;
         }
 
-        for (int i = 0; i < n + 1; i++) {
-            Collections.sort(graph.get(i), Collections.reverseOrder());
-        }
-        dfs();
-        bfs();
-    }
-    private static void dfs(){
-        boolean[] visited = new boolean[n + 1];
-
-        Stack<Integer> stack = new Stack<>();
-        stack.push(v);
-
-        while (!stack.isEmpty()) {
-            int x = stack.pop();
-            if (!visited[x]) {
-                visited[x] = true;
-                System.out.print(x+" ");
-            }
-            for (int val : graph.get(x)) {
-                if (!visited[val]) {
-                    stack.push(val);
-                }
-            }
-        }
+        visited = new boolean[n+1];
+        dfs(v);
         System.out.println();
-    }
-    private static void bfs() {
-
-        boolean[] visited = new boolean[n + 1];
-        Queue<Integer> q = new LinkedList<>();
-
-        // 시작 정점을 스택에 추가
-        q.offer(v);
-        visited[v] = true;
-        while (!q.isEmpty()) {
-            int node = q.poll();
-
-            System.out.print(node+" ");
-
-            List<Integer> n = graph.get(node);
-            for (int i = n.size() - 1; i >= 0; i--) {
-                if (!visited[n.get(i)]) {
-                    visited[n.get(i)] = true;
-                    q.offer(n.get(i));
-                }
-            }
-        }
-        System.out.println();
+        visited = new boolean[n+1];
+        bfs(v);
     }
 }
