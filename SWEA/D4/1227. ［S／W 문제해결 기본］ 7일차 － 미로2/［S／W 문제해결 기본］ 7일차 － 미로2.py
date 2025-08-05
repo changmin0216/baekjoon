@@ -1,49 +1,72 @@
-#import sys
-from collections import deque
-#input = sys.stdin.readline
+import java.io.*;
+import java.util.*;
 
+public class Solution {
+	static int[][] map;
+	static boolean[][] visited;
+	static int[] dy = {-1,1,0,0};
+	static int[] dx = {0,0,-1,1};	
+	static boolean bfs(int y, int x) {
+		ArrayDeque<int[]> q = new ArrayDeque<>();
+		q.offer(new int[] {y, x});
+		
+		visited = new boolean[100][100];
+		visited[y][x] = true;
+		
+		while(!q.isEmpty()) {
+			int[] now = q.poll();
+			
+			if (map[now[0]][now[1]] == 3) {
+				return true;
+			}
+			for (int i=0;i<4;i++) {
+				int ny = now[0] + dy[i];
+				int nx = now[1] + dx[i];
+				
+				if (0<=ny&&ny<100 && 0<=nx&&nx<100 && map[ny][nx]!=1 && !visited[ny][nx]) {
+					visited[ny][nx] = true;
+					q.offer(new int[] {ny, nx});
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	
 
-def bfs(start_y, start_x, map_):
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//		StringTokenizer st;
+		StringBuilder sb = new StringBuilder();
+		
+		for (int tc=1;tc<=10;tc++) {
+			int t = Integer.parseInt(br.readLine());
+			
+			map = new int[100][100];
+			
+			int start_y = -1, start_x = -1;
+			for (int i=0;i<100;i++) {
+				String st = br.readLine();
+//				st = new StringTokenizer(br.readLine());
+				for (int j=0;j<100;j++) {
+					int v = st.charAt(j) - '0';
+					if (v==2) {
+						start_y = i;
+						start_x = j;
+					}
+					map[i][j] = v;
+				}
+			}
+			
+			int result = 0;
+			if (bfs(start_y, start_x)) result = 1;
+			
+			sb.append("#").append(t).append(" ").append(result).append("\n");
+		}
+		System.out.println(sb);
+	}
 
-    q = deque()
-    q.append((start_y, start_x))
-
-    visited = [[False] * 100 for _ in range(100)]
-
-    visited[start_y][start_x] = True
-
-    while q:
-        ey, ex = q.popleft()
-
-        if map_[ey][ex] == 3:
-            return True
-
-        for i in range(4):
-            ny, nx = ey + dy[i], ex + dx[i]
-
-            if 0 <=ny<100 and 0<=nx<100 and map_[ny][nx]!=1 and not visited[ny][nx]:
-                visited[ny][nx] = True
-                q.append((ny, nx))
-    return False
-
-dy = [-1,1,0,0]
-dx = [0,0,-1,1]
-
-for _ in range(10):
-    t = int(input())
-
-    start_x, start_y = -1, -1
-    map_ = []
-    for i in range(100):
-        tmp = list(map(int, input().rstrip()))
-        for j in range(len(tmp)):
-            if tmp[j] == 2:
-                start_y = i
-                start_x = j
-        map_.append(tmp)
-
-    print(f'#{t}', end=' ')
-    if bfs(start_y, start_x, map_):
-        print(1)
-    else:
-        print(0)
+}
