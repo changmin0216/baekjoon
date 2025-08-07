@@ -6,23 +6,27 @@ public class Solution {
 	static int[] score;
 	static int[] cal;
 	static int R;
-	static int[] b;
 	static int result;
-	static void comb(int depth, int start, int calSum) {
+//	static void comb(int depth, int start, int sum, int calSum) {
+//		if (calSum > l) return;
+//		if(depth==R) {
+//			result = Math.max(result, sum);
+//			return;
+//		}
+//		
+//		for (int i=start;i<n;i++) {
+//			comb(depth+1, i+1, sum+score[i], calSum+cal[i]);
+//		}
+//	}
+	static void recur(int idx, int scoreSum, int calSum) {
 		if (calSum > l) return;
-		if(depth==R) {
-			int sum = 0;
-			for (int i=0;i<R;i++) {
-				sum+=b[i];
-			}
-			result = Math.max(result, sum);
+		if (idx==n) {
+			result = Math.max(result, scoreSum);
 			return;
 		}
 		
-		for (int i=start;i<n;i++) {
-			b[depth] = score[i];
-			comb(depth+1, i+1, calSum+cal[i]);
-		}
+		recur(idx+1, scoreSum+score[idx], calSum+cal[idx]);
+		recur(idx+1, scoreSum, calSum);
 	}
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -45,11 +49,12 @@ public class Solution {
 			}
 			
 			result = Integer.MIN_VALUE;
-			for (int i=1;i<n+1;i++) {
-				R = i;
-				b = new int[R]; 
-				comb(0, 0, 0);
-			}
+//			for (int i=1;i<n+1;i++) {
+//				R = i;
+//				comb(0, 0, 0, 0);
+//				
+//			}
+			recur(0, 0, 0);
 			sb.append("#").append(tc).append(" ").append(result).append("\n");
 		}
 		System.out.println(sb);
