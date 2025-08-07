@@ -8,20 +8,31 @@ public class Solution {
 	static int R;
 	static int[] b;
 	static int result;
-	static void comb(int depth, int start, int calSum) {
+//	static void comb(int depth, int start, int calSum) {
+//		if (calSum > l) return;
+//		if(depth==R) {
+//			int sum = 0;
+//			for (int i=0;i<R;i++) {
+//				sum+=b[i];
+//			}
+//			result = Math.max(result, sum);
+//			return;
+//		}
+//		
+//		for (int i=start;i<n;i++) {
+//			b[depth] = score[i];
+//			comb(depth+1, i+1, calSum+cal[i]);
+//		}
+//	}
+	static void comb(int depth, int start, int sum, int calSum) {
 		if (calSum > l) return;
 		if(depth==R) {
-			int sum = 0;
-			for (int i=0;i<R;i++) {
-				sum+=b[i];
-			}
 			result = Math.max(result, sum);
 			return;
 		}
 		
 		for (int i=start;i<n;i++) {
-			b[depth] = score[i];
-			comb(depth+1, i+1, calSum+cal[i]);
+			comb(depth+1, i+1, sum+score[i], calSum+cal[i]);
 		}
 	}
 	public static void main(String[] args) throws Exception{
@@ -48,7 +59,9 @@ public class Solution {
 			for (int i=1;i<n+1;i++) {
 				R = i;
 				b = new int[R]; 
-				comb(0, 0, 0);
+//				comb(0, 0, 0);
+				comb(0, 0, 0, 0);
+				
 			}
 			sb.append("#").append(tc).append(" ").append(result).append("\n");
 		}
