@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Solution{
+public class Solution {
     static int N;
     static int[][] g;
     static int[][] dp; 
@@ -30,9 +30,9 @@ public class Solution{
         StringBuilder sb = new StringBuilder();
         StringTokenizer st;
 
-        int T = Integer.parseInt(br.readLine().trim());
+        int T = Integer.parseInt(br.readLine());
         for (int tc = 1; tc <= T; tc++) {
-            N = Integer.parseInt(br.readLine().trim());
+            N = Integer.parseInt(br.readLine());
             g = new int[N][N];
             dp = new int[N][N];
 
