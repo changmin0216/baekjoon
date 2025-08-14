@@ -2,24 +2,31 @@ import java.io.*;
 import java.util.*;
 
 public class Solution {
-    static int N, cnt;
+    static int N;
     static int[][] g;
     static int[][] result;
     static final int[] dy = {-1, 1, 0, 0};
     static final int[] dx = {0, 0, -1, 1};
 
-    static void dfs(int y, int x) {
-    	cnt++;
-        for (int i = 0; i < 4; i++) {
-            int ny = y + dy[i];
-            int nx = x + dx[i];
-            if (0 <= ny && ny < N && 0 <= nx && nx < N) {
-                if (g[ny][nx] == g[y][x] + 1) {
-                    dfs(ny, nx);
-                    break;
+    static int bfs(int y, int x) {
+    	int cnt = 0;
+    	ArrayDeque<int[]> q = new ArrayDeque<>();
+    	q.offer(new int[] {y, x});
+    	while(!q.isEmpty()) {
+    		int[] now = q.poll();
+        	cnt++;
+        	for (int i = 0; i < 4; i++) {
+            	
+                int ny = now[0] + dy[i];
+                int nx = now[1] + dx[i];
+                if (0 <= ny && ny < N && 0 <= nx && nx < N) {
+                    if (g[ny][nx] == g[now[0]][now[1]] + 1) {
+                    	q.offer(new int[]{ny, nx});
+                    }
                 }
             }
-        }
+    	}
+        return cnt;
     }
     
     public static void main(String[] args) throws Exception {
@@ -45,8 +52,7 @@ public class Solution {
             
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
-                	cnt = 0;
-                    dfs(i, j);
+                	int cnt = bfs(i, j);
                     if (result_cnt < cnt || (result_cnt == cnt && result_num > g[i][j])) {
                     	result_cnt = cnt;
                     	result_num = g[i][j];
