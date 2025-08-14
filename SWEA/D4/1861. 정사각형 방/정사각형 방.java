@@ -2,25 +2,28 @@ import java.io.*;
 import java.util.*;
 
 public class Solution {
-    static int N, cnt;
+    static int N;
     static int[][] g;
-    static int[][] result;
+    static int[][] dp; 
     static final int[] dy = {-1, 1, 0, 0};
     static final int[] dx = {0, 0, -1, 1};
 
-    static void dfs(int y, int x) {
-    	cnt++;
-   
+    static int dfs(int y, int x) {
+    	
+        if (dp[y][x] != 0) return dp[y][x]; // 이미 방문한 곳은 다시 탐색X
+        
+        dp[y][x] = 1;
         for (int i = 0; i < 4; i++) {
             int ny = y + dy[i];
             int nx = x + dx[i];
             if (0 <= ny && ny < N && 0 <= nx && nx < N) {
                 if (g[ny][nx] == g[y][x] + 1) { // 탐색한 위치의 값이 현재 위치의 값보다 1이 크다면
-                    dfs(ny, nx);
+                    dp[y][x] = 1 + dfs(ny, nx);
                     break; // 현재 위치에서 갈 수 있는 경로는 최대 1개 
                 }
             }
         }
+        return dp[y][x];
     }
 
     public static void main(String[] args) throws Exception {
@@ -32,29 +35,27 @@ public class Solution {
         for (int tc = 1; tc <= T; tc++) {
             N = Integer.parseInt(br.readLine());
             g = new int[N][N];
-            result = new int[N][N];
-			for (int i = 0; i < N; i++) {
+            dp = new int[N][N];
+
+            for (int i = 0; i < N; i++) {
                 st = new StringTokenizer(br.readLine());
                 for (int j = 0; j < N; j++) {
                     g[i][j] = Integer.parseInt(st.nextToken());
                 }
             }
             
-            int result_num = -1;
-            int result_cnt = Integer.MIN_VALUE;
-            
-            
+            int result_num=0, result_cnt=-0;
+
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
-                	cnt = 0;
-                    dfs(i, j);
+                    int cnt = dfs(i, j);
                     if (result_cnt < cnt || (result_cnt == cnt && result_num > g[i][j])) {
                     	result_cnt = cnt;
                     	result_num = g[i][j];
                     }
                 }
             }
-            
+
             sb.append("#").append(tc).append(" ").append(result_num).append(" ").append(result_cnt).append("\n");
         }
         System.out.print(sb.toString());
