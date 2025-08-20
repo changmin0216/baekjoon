@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Solution {
+public class Solution{
 	static int[][] map;
 	static int n;
 	static boolean[][] v;
