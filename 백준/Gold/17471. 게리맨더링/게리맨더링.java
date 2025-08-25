@@ -12,71 +12,68 @@ public class Main {
     static ArrayList<int[]> arr = new ArrayList<>();
     static int result = Integer.MAX_VALUE;
 
-    // 조합: visited 제거 + i+1 진행
-static void comb(int cnt, int start) {
-    if (cnt == R) {
-        processCombination(Arrays.copyOf(b, R));
-        return;
-    }
-    for (int i = start; i <= N; i++) {
-        b[cnt] = i;
-        comb(cnt + 1, i + 1);
-    }
-}
+    static boolean bfs(int start, List<Integer> arr) {
+        ArrayDeque<Integer> q = new ArrayDeque<>();
+        q.offer(start);
+        vi[start] = true;
 
-private static void processCombination(int[] ary) {
-    boolean[] inLeft = new boolean[N + 1];
-    for (int v : ary) inLeft[v] = true;
-
-    boolean[] inRight = new boolean[N + 1];
-    for (int i = 1; i <= N; i++) if (!inLeft[i]) inRight[i] = true;
-
-    // 왼쪽 연결성
-    vi = new boolean[N + 1];
-    int leftStart = -1, rightStart = -1;
-    for (int i = 1; i <= N; i++) if (inLeft[i]) { leftStart = i; break; }
-    for (int i = 1; i <= N; i++) if (inRight[i]) { rightStart = i; break; }
-
-    if (leftStart == -1 || rightStart == -1) return; // 한쪽이 비면 스킵
-
-    if (!bfs(leftStart, inLeft)) return;
-
-    // 오른쪽 연결성
-    vi = new boolean[N + 1];
-    if (!bfs(rightStart, inRight)) return;
-
-    // 합계 계산
-    int leftSum = 0, rightSum = 0;
-    for (int i = 1; i <= N; i++) {
-        if (inLeft[i])  leftSum  += population[i];
-        else            rightSum += population[i];
-    }
-    result = Math.min(result, Math.abs(leftSum - rightSum));
-}
-
-// BFS: 집합 내부만 방문
-static boolean bfs(int start, boolean[] inSet) {
-    ArrayDeque<Integer> q = new ArrayDeque<>();
-    q.offer(start);
-    vi[start] = true;
-    int visitedCount = 0;
-    int need = 0;
-    for (int i = 1; i <= N; i++) if (inSet[i]) need++;
-
-    while (!q.isEmpty()) {
-        int now = q.poll();
-        if (!inSet[now]) continue;
-        visitedCount++;
-        for (int nxt : graph[now]) {
-            if (!vi[nxt] && inSet[nxt]) {
-                vi[nxt] = true;
-                q.offer(nxt);
+        while (!q.isEmpty()) {
+            int now = q.poll();
+            if (!arr.contains(now)) continue;
+            for (int a : graph[now]) {
+                if (!vi[a]) {
+                    vi[a] = true;
+                    q.offer(a);
+                }
             }
         }
-    }
-    return visitedCount == need;
-}
+        return true;
 
+    }
+
+    static void comb(int cnt, int start) {
+        if(cnt == R) {
+            processCombination(Arrays.copyOf(b, R));
+            return;
+        }
+
+        for (int i = start; i < N + 1; i += 1) {
+            if(visited[i]) continue;
+            visited[i] = true;
+            b[cnt] = i;
+            comb(cnt + 1, i);
+            visited[i] = false;
+        }
+    }
+
+    private static void processCombination(int[] ary) {
+        List<Integer> left = new ArrayList<>();
+        for (int num : ary) left.add(num);
+
+        List<Integer> right = new ArrayList<>();
+        for (int i = 1; i <= N; i++) {
+            if (!left.contains(i)) right.add(i);
+        }
+
+        vi = new boolean[N + 1];
+        bfs(left.get(0), left);
+        for (int v : left) {
+            if (!vi[v]) return;
+        }
+
+        vi = new boolean[N + 1];
+        bfs(right.get(0), right);
+        for (int v : right) {
+            if (!vi[v]) return;
+        }
+
+        int leftSum = 0, rightSum = 0;
+        for (int v : left) leftSum += population[v];
+        for (int v : right) rightSum += population[v];
+
+        int diff = Math.abs(leftSum - rightSum);
+        result = Math.min(result, diff);
+    }
 
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
