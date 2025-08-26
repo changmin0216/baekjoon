@@ -1,38 +1,39 @@
 
 import java.io.*;
 import java.util.*;
-public class Solution {
+public class Solution{
 	static int n, s_y, s_x, e_y, e_x;
-	static int[] perm;
+//	static int[] perm;
 	static boolean[] visited;
-	static int[][] points;
+//	static int[][] points;
 	static int result;
-	
-	static void cal() {
-		int dist = Math.abs(s_y - points[perm[0]][0]) + Math.abs(s_x - points[perm[0]][1]);
-		for (int i=1;i<n;i++) {
-			dist += Math.abs(points[perm[i]][0] - points[perm[i-1]][0]) 
-					+ Math.abs(points[perm[i]][1] - points[perm[i-1]][1]);
-		}
-		dist += Math.abs(e_y - points[perm[n-1]][0]) + Math.abs(e_x - points[perm[n-1]][1]);
-		
-		result = Math.min(result, dist);
-		return;
-	}
-	static void perm(int depth) {
-		if (depth == n) {
-			cal();
-			return;
-		}
-		
-		for(int i=0;i<n;i++) {
-			if(visited[i]) continue;
-			perm[depth] = i;
-			visited[i]=true;
-			perm(depth+1);
-			visited[i]=false;
-		}
-	}
+	static int[][] g;
+//	
+//	static void cal() {
+//		int dist = Math.abs(s_y - points[perm[0]][0]) + Math.abs(s_x - points[perm[0]][1]);
+//		for (int i=1;i<n;i++) {
+//			dist += Math.abs(points[perm[i]][0] - points[perm[i-1]][0]) 
+//					+ Math.abs(points[perm[i]][1] - points[perm[i-1]][1]);
+//		}
+//		dist += Math.abs(e_y - points[perm[n-1]][0]) + Math.abs(e_x - points[perm[n-1]][1]);
+//		
+//		result = Math.min(result, dist);
+//		return;
+//	}
+//	static void perm(int depth) {
+//		if (depth == n) {
+//			cal();
+//			return;
+//		}
+//		
+//		for(int i=0;i<n;i++) {
+//			if(visited[i]) continue;
+//			perm[depth] = i;
+//			visited[i]=true;
+//			perm(depth+1);
+//			visited[i]=false;
+//		}
+//	}
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -43,29 +44,53 @@ public class Solution {
 		for(int tc=1;tc<=t;tc++) {
 			n = Integer.parseInt(br.readLine());
 			
+			
 			st = new StringTokenizer(br.readLine());
-			s_y = Integer.parseInt(st.nextToken());
-			s_x = Integer.parseInt(st.nextToken());
-			
-			e_y = Integer.parseInt(st.nextToken());
-			e_x = Integer.parseInt(st.nextToken());
-			
-			points = new int[n][2];
-			for (int i=0;i<n;i++) {
-				points[i][0] = Integer.parseInt(st.nextToken());
-				points[i][1] = Integer.parseInt(st.nextToken());
+			ArrayList<int[]> arr = new ArrayList<>();
+			int yy = -1;
+			int xx = -1;
+			for (int i=0;i<n+2;i++) {
+				int y = Integer.parseInt(st.nextToken());
+				int x = Integer.parseInt(st.nextToken());
+				if (i==1) {
+					yy = y;
+					xx = x;
+					continue;
+				}
+				arr.add(new int[] {y, x});
 			}
+			arr.add(new int[] {yy, xx});
 			
+			g = new int[n+2][n+2];
+			for (int i=0;i<n+2;i++) {
+				for (int j=0;j<n+2;j++) {
+					g[i][j] = Math.abs(arr.get(i)[0] - arr.get(j)[0]) + Math.abs(arr.get(i)[1] - arr.get(j)[1]);
+				}
+			}
+//			for (int[] a:g) System.out.println(Arrays.toString(a));
 			
-			
-			visited = new boolean[n];
+			visited = new boolean[n+2];
 			result = Integer.MAX_VALUE;
-			perm = new int[n];
-			perm(0);
+			recur(0, 0, 0);
 			
 			sb.append("#").append(tc).append(" ").append(result).append("\n");
 		}
 		System.out.println(sb);
+	}
+	static void recur(int depth, int num, int dist) {
+		if (depth == n) {
+			dist += g[num][n+1];
+//			System.out.println(dist);
+			result = Math.min(result, dist);
+			return;
+		}
+		if (dist > result) return;
+		for (int i=1;i<n+1;i++) {
+			if(visited[i]) continue;
+			visited[i] = true;
+			recur(depth+1, i, dist+g[num][i]);
+			visited[i] = false;
+		}
 	}
 }
 
