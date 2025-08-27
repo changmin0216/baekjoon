@@ -54,123 +54,123 @@ public class Solution {
 				q.offer(new Micro(y, x, dir-1, cnt, -1));
 			}
 			
-//			HashMap<Integer, Micro> map = new HashMap<>();
-//			//시뮬레이션
-//			for(int t=0;t<m;t++) {
-//				while(!q.isEmpty()) {
-//					Micro cur = q.poll();
-//					
-//					int ny = cur.y + dy[cur.dir];
-//					int nx = cur.x +dx[cur.dir];
-//					
-//					if (ny==0 || ny== n-1 || nx == 0 || nx == n-1) {
-//						cur.y = ny;
-//						cur.x = nx;
-//						//군집 개수 절반으로 죽여
-//						cur.cnt/=2;
-//						//방향 바꿔
-//						if (cur.dir==0) cur.dir=1;
-//						else if (cur.dir==1) cur.dir=0;
-//						else if (cur.dir==2) cur.dir=3;
-//						else cur.dir=2;
-//					} 
-//					
-//					
-//					int key = ny*n + nx;
-//					
-//					cur.y = ny; cur.x = nx;
-//					
-//	
-//					if (!map.containsKey(key)) {
-//						cur.prev_cnt = cur.cnt;
-//						map.put(key, cur);
-//					} else {
-//						Micro origin = map.get(key);
-//
-//						if(origin.prev_cnt > cur.cnt) {
-//							origin.cnt+=cur.cnt;
-//						} else {
-//							cur.prev_cnt = cur.cnt;
-//							cur.cnt+=origin.cnt;
-//							map.put(key, cur);
-//						}
-//					}
-//				}
-//				for (Micro nm : map.values()) {
-//                    nm.prev_cnt = -1;
-//                    q.offer(nm);
-//                }
-//				map.clear();
-//			}
-//			int result=0;
-//			while(!q.isEmpty()) {
-//				Micro m = q.poll();
-//				System.out.println(q.toString());
-//				result+=m.cnt;
-//			}
-			for (int t = 0; t < m; t++) { // 1. 시간의 흐름
-			    // 2. 매 시간마다 다음 상태를 기록할 새로운 맵 생성
-			    HashMap<Integer, ArrayList<Micro>> nextStateMap = new HashMap<>();
+			HashMap<Integer, Micro> map = new HashMap<>();
+			//시뮬레이션
+			for(int t=0;t<m;t++) {
+				while(!q.isEmpty()) {
+					Micro cur = q.poll();
+					
+					int ny = cur.y + dy[cur.dir];
+					int nx = cur.x +dx[cur.dir];
+					
+					if (ny==0 || ny== n-1 || nx == 0 || nx == n-1) {
+						cur.y = ny;
+						cur.x = nx;
+						//군집 개수 절반으로 죽여
+						cur.cnt/=2;
+						//방향 바꿔
+						if (cur.dir==0) cur.dir=1;
+						else if (cur.dir==1) cur.dir=0;
+						else if (cur.dir==2) cur.dir=3;
+						else cur.dir=2;
+					} 
+					
+					
+					int key = ny*n + nx;
+					
+					cur.y = ny; cur.x = nx;
+					
+	
+					if (!map.containsKey(key)) {
+						cur.prev_cnt = cur.cnt;
+						map.put(key, cur);
+					} else {
+						Micro origin = map.get(key);
 
-			    // 3. [이동 단계]
-			    while (!q.isEmpty()) {
-			        Micro current = q.poll();
-			        
-			        // 다음 위치 계산
-			        int ny = current.y + dy[current.dir];
-			        int nx = current.x + dx[current.dir];
-			        
-			        // 약품 셀 처리
-			        if (ny == 0 || ny == n - 1 || nx == 0 || nx == n - 1) {
-			            current.cnt /= 2;
-			            // 방향 전환 (예: dir % 2 == 0 ? dir+1 : dir-1)
-			            if (current.dir == 0) current.dir = 1;
-			            else if (current.dir == 1) current.dir = 0;
-			            else if (current.dir == 2) current.dir = 3;
-			            else current.dir = 2;
-			        }
-			        
-			        current.y = ny;
-			        current.x = nx;
-			        
-			        // 미생물이 살아있으면 nextStateMap에 추가
-			        if (current.cnt > 0) {
-			            int key = ny * n + nx;
-			            if (!nextStateMap.containsKey(key)) {
-			                nextStateMap.put(key, new ArrayList<>());
-			            }
-			            nextStateMap.get(key).add(current);
-			        }
-			    }
-
-			    // 4. [병합 단계]
-			    for (ArrayList<Micro> list : nextStateMap.values()) {
-			        if (list.size() == 1) {
-			            q.offer(list.get(0)); // 군집이 하나면 그대로 q에 추가
-			        } else {
-			            // 여러 군집이 모였으면 병합
-			            int totalCnt = 0;
-			            int maxCnt = 0;
-			            int finalDir = -1;
-			            
-			            for (Micro micro : list) {
-			                totalCnt += micro.cnt;
-			                if (micro.cnt > maxCnt) {
-			                    maxCnt = micro.cnt;
-			                    finalDir = micro.dir;
-			                }
-			            }
-			            // 병합된 새로운 군집을 q에 추가
-			            q.offer(new Micro(list.get(0).y, list.get(0).x, finalDir, totalCnt, 0));
-			        }
-			    }
+						if(origin.prev_cnt > cur.cnt) {
+							origin.cnt+=cur.cnt;
+						} else {
+							cur.prev_cnt = cur.cnt;
+							cur.cnt+=origin.cnt;
+							map.put(key, cur);
+						}
+					}
+				}
+				for (Micro nm : map.values()) {
+                    nm.prev_cnt = -1;
+                    q.offer(nm);
+                }
+				map.clear();
 			}
-
-			// 5. 최종 결과 계산
-			int result = 0;
+			int result=0;
 			while(!q.isEmpty()) {
-			    result += q.poll().cnt;
+				Micro m = q.poll();
+//				System.out.println(q.toString());
+				result+=m.cnt;
 			}
+//			for (int t = 0; t < m; t++) { // 1. 시간의 흐름
+//			    // 2. 매 시간마다 다음 상태를 기록할 새로운 맵 생성
+//			    HashMap<Integer, ArrayList<Micro>> nextStateMap = new HashMap<>();
+//
+//			    // 3. [이동 단계]
+//			    while (!q.isEmpty()) {
+//			        Micro current = q.poll();
+//			        
+//			        // 다음 위치 계산
+//			        int ny = current.y + dy[current.dir];
+//			        int nx = current.x + dx[current.dir];
+//			        
+//			        // 약품 셀 처리
+//			        if (ny == 0 || ny == n - 1 || nx == 0 || nx == n - 1) {
+//			            current.cnt /= 2;
+//			            // 방향 전환 (예: dir % 2 == 0 ? dir+1 : dir-1)
+//			            if (current.dir == 0) current.dir = 1;
+//			            else if (current.dir == 1) current.dir = 0;
+//			            else if (current.dir == 2) current.dir = 3;
+//			            else current.dir = 2;
+//			        }
+//			        
+//			        current.y = ny;
+//			        current.x = nx;
+//			        
+//			        // 미생물이 살아있으면 nextStateMap에 추가
+//			        if (current.cnt > 0) {
+//			            int key = ny * n + nx;
+//			            if (!nextStateMap.containsKey(key)) {
+//			                nextStateMap.put(key, new ArrayList<>());
+//			            }
+//			            nextStateMap.get(key).add(current);
+//			        }
+//			    }
+//
+//			    // 4. [병합 단계]
+//			    for (ArrayList<Micro> list : nextStateMap.values()) {
+//			        if (list.size() == 1) {
+//			            q.offer(list.get(0)); // 군집이 하나면 그대로 q에 추가
+//			        } else {
+//			            // 여러 군집이 모였으면 병합
+//			            int totalCnt = 0;
+//			            int maxCnt = 0;
+//			            int finalDir = -1;
+//			            
+//			            for (Micro micro : list) {
+//			                totalCnt += micro.cnt;
+//			                if (micro.cnt > maxCnt) {
+//			                    maxCnt = micro.cnt;
+//			                    finalDir = micro.dir;
+//			                }
+//			            }
+//			            // 병합된 새로운 군집을 q에 추가
+//			            q.offer(new Micro(list.get(0).y, list.get(0).x, finalDir, totalCnt, 0));
+//			        }
+//			    }
+//			}
+
+//			// 5. 최종 결과 계산
+//			int result = 0;
+//			while(!q.isEmpty()) {
+//			    result += q.poll().cnt;
+//			}
 			sb.append("#").append(tc).append(" ").append(result).append("\n");
 		}
 		System.out.println(sb);
