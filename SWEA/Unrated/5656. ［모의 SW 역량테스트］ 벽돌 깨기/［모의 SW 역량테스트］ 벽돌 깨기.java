@@ -12,19 +12,19 @@ public class Solution {
 	    // 이미 최소값이 0이면 더 이상 탐색할 필요 없음
 	    if (answer == 0) return;
 
+	    int remain = getCnt(arr);
 	    // 남은 벽돌이 없으면 answer를 0으로 갱신하고 종료
-	    if (getCnt(arr) == 0) {
+	    if (remain == 0) {
 	        answer = 0;
 	        return;
 	    }
 
 	    // 구슬을 N번 모두 쐈으면 남은 벽돌 개수를 최소값과 비교해 갱신
 	    if (depth == N) {
-	        answer = Math.min(answer, getCnt(arr));
+	        answer = Math.min(answer, remain);
 	        return;
 	    }
 
-	    // 모든 열에 대해 구슬을 떨어뜨려 시뮬레이션
 	    for (int i = 0; i < W; i++) {
 	        boolean[][] visited = new boolean[H][W]; // 폭발 처리 중 방문 체크
 	        int[][] temp = copy(arr);                // 현재 보드 상태 복사
@@ -47,12 +47,9 @@ public class Solution {
 	    }
 	}
 	
-	// 중력 효과를 적용하는 함수
-	// arr : 폭발 후 보드 상태, 벽돌들을 아래로 떨어뜨림
 	static void down(int[][] arr) {
 	    ArrayDeque<Integer> stack = new ArrayDeque<>(); // 한 열의 벽돌을 임시로 저장
 
-	    // 모든 열에 대해 처리
 	    for (int j = 0; j < W; j++) {
 	        // 현재 열에서 벽돌을 위에서부터 탐색
 	        for (int i = 0; i < H; i++) {
@@ -60,37 +57,30 @@ public class Solution {
 	            arr[i][j] = 0; // 해당 위치는 일단 빈 칸으로 초기화
 	        }
 
-	        // 스택에서 벽돌을 하나씩 꺼내며 아래쪽부터 채워 넣음
-	        int index = H - 1; // 가장 아래 행부터 채우기 시작
+	        int index = H - 1;
 	        while (!stack.isEmpty()) {
 	            arr[index--][j] = stack.pop();
 	        }
 	    }
 	}
 		
-	// 벽돌 폭발을 처리하는 함수
-	// arr   : 원본 보드 상태
-	// x, y  : 현재 폭발이 발생한 벽돌 위치
-	// temp  : 폭발 후의 보드 상태를 반영할 배열
-	// visited : 이미 폭발 처리한 위치를 체크하기 위한 배열
 	static void boom(int[][] arr, int x, int y, int[][] temp, boolean[][] visited) {
-	    // 4방향(상, 하, 좌, 우) 탐색
-	    for (int i = 0; i < 4; i++) {
-	        // 현재 벽돌의 숫자만큼 범위 확장
-	        for (int k = 0; k < arr[x][y]; k++) {
-	            int nx = x + dx[i] * k; 
-	            int ny = y + dy[i] * k; 
+	    if (visited[x][y]) return;
+	    visited[x][y] = true;
+	    int power = arr[x][y];
 
-	            // 보드 범위 안이고 아직 방문하지 않은 위치인 경우
-	            if (nx >= 0 && nx < H && ny >= 0 && ny < W && !visited[nx][ny]) {
-	                visited[nx][ny] = true;  // 방문 처리
-	                temp[nx][ny]--;          // 벽돌 카운트를 감소 (중간 표시)
+	    temp[x][y] = 0;
 
-	                // 해당 위치에 벽돌이 남아 있다면 재귀로 연쇄 폭발 처리
-	                if (arr[nx][ny] > 0) {
-	                    temp[nx][ny] = 0;    // 해당 벽돌 제거
-	                    boom(arr, nx, ny, temp, visited);
-	                }
+	    for (int d = 0; d < 4; d++) {
+	        for (int k = 1; k < power; k++) {
+	            int nx = x + dy[d] * k; 
+	            int ny = y + dx[d] * k;
+	            if (nx < 0 || nx >= H || ny < 0 || ny >= W) break;
+	            if (visited[nx][ny]) continue;
+
+	            if (arr[nx][ny] > 0) { 
+	                temp[nx][ny] = 0;
+	                boom(arr, nx, ny, temp, visited);
 	            }
 	        }
 	    }
