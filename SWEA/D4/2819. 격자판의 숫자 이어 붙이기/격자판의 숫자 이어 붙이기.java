@@ -1,7 +1,7 @@
 
 import java.io.*;
 import java.util.*;
-public class Solution {
+public class Solution{
 	static int[] dy = {-1,1,0,0};
 	static int[] dx = {0,0,-1,1};
 	static HashSet<String> set;
