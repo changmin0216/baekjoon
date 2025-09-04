@@ -16,7 +16,7 @@ class Atom {
 	}
 }
 
-public class Solution {
+public class Solution{
 	static int n;
 	static int answer;
 	
