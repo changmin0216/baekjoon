@@ -1,7 +1,7 @@
 
 import java.io.*;
 import java.util.*;
-public class Main{
+public class Main {
     static int n, m, k;
     static long[] arr;
     static long[] seg;
@@ -51,9 +51,9 @@ public class Main{
     }
 
     static void update(int n, int l, int r, long diff, int index) {
-        if (index < l || index > r) return;
-        if(l==r) {
-            arr[index]+=diff;
+        if (index < l || index > r) return;;
+        if (l==r) {
+            arr[l]+=diff;
             seg[n]+=diff;
             return;
         }
