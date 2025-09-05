@@ -4,6 +4,9 @@ import java.util.*;
 public class Solution {
 	static int d, w, k;
 	static int result;
+	static int[] selected;
+	static int[][] film;
+	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
@@ -17,7 +20,7 @@ public class Solution {
 			w = Integer.parseInt(st.nextToken());
 			k = Integer.parseInt(st.nextToken());
 			
-			int[][] film = new int[d][w];
+			film = new int[d][w];
 			for (int i=0;i<d;i++) {
 				st = new StringTokenizer(br.readLine());
 				for (int j=0;j<w;j++) {
@@ -25,21 +28,22 @@ public class Solution {
 				}
 			}
 			
+			selected = new int[d];
+			Arrays.fill(selected, -1);
+			
+			int answer;
+			
 			result = Integer.MAX_VALUE;
-			recur(0, film, 0);
+			recur(0, 0);
 			sb.append("#").append(tc).append(" ").append(result).append("\n");
 		}
 		System.out.println(sb);
 	}
 	
-	static void recur(int depth, int[][] film, int cnt) {
+	static void recur(int depth, int cnt) {
 		if(depth==film.length) {
 			
 			if (check(film, k)) {
-//				for (int[] a:film) System.out.println(Arrays.toString(a));
-//				System.out.println(cnt);
-//				System.out.println();
-				
 				result = Math.min(result, cnt);
 			}
 			return;
@@ -47,54 +51,63 @@ public class Solution {
 		
 		if (cnt > result) return;
 		
-		int[][] tmp = new int[d][w];
-		for (int i=0;i<d;i++) {
-			for (int j=0;j<w;j++) {
-				tmp[i][j] = film[i][j];
-			}
-		}
 		
-		int[][] tmp2 = new int[d][w];
-		for (int i=0;i<d;i++) {
-			for (int j=0;j<w;j++) {
-				tmp2[i][j] = film[i][j];
-			}
-		}
 		
 		//안 바꿨을 
-		recur(depth+1, tmp, cnt);
-		//행을 다 1로 바꾸자
-		for (int i=0;i<w;i++) {
-			film[depth][i] =1;
-		}
-		recur(depth+1, film, cnt+1);
+		recur(depth+1, cnt);
+		//행을 다 1로 바꿔
+		selected[depth] = 1;
+		recur(depth+1, cnt+1);
+		selected[depth] = 0;
 		//행을 다 0로 바꾸자
-		for (int i=0;i<w;i++) {
-			tmp2[depth][i] =0;
-		}
-		
-		recur(depth+1, tmp2, cnt+1);
+		recur(depth+1, cnt+1);
+		// 원복
+		selected[depth] = -1;
 	}
 	
 	static boolean check(int[][] film, int k) {
+		if(k==1) return true;
+		
+		
 		int n = film.length;
 		int m = film[0].length;
 		
 		for (int x=0;x<m;x++) {
-			int cnt = 0;
-			int prev = film[0][x];
-			for (int y=0;y<n;y++) {
-				if (prev==film[y][x]) {
-					cnt++;
-				} else {
-					cnt = 1;
-					prev = film[y][x];
-				}
-				
-				if (cnt==k) break;
-			}
-			if (cnt<k) return false;
-		}
+			int cnt = 1;
+	        int prev;
+
+	        // 첫 행 값 구하기
+	        if (selected[0] == -1) {
+	            prev = film[0][x];
+	        } else {
+	            prev = selected[0];
+	        }
+	        
+	        boolean ok = false;
+
+	        for (int y = 1; y < n; y++) {
+	            int cur;
+	            if (selected[y] == -1) {
+	                cur = film[y][x];
+	            } else {
+	                cur = selected[y];
+	            }
+
+	            if (prev == cur) {
+	                cnt++;
+	                if (cnt == k) {
+	                    ok = true;
+	                    break;
+	                }
+	            } else {
+	                prev = cur;
+	                cnt = 1;
+	            }
+	        }
+
+	        if (!ok) return false; // 이 열이 불합격이면 전체 실패
+	    }
+		
 		return true;
 	}
 }
