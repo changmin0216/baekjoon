@@ -1,10 +1,8 @@
-
 import java.io.*;
 import java.util.*;
-public class Solution{
+public class Solution {
 
 	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
 		StringBuilder sb = new StringBuilder();
