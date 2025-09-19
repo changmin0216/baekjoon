@@ -1,25 +1,36 @@
 import java.util.*;
-import java.io.*;
-
 class Solution {
-    static int len;
-    static int result = 0;
-    static int target_num;
-    public static int solution(int[] numbers, int target) {
-        len = numbers.length;
-        target_num = target;
-        dfs(0, 0, numbers);
-        return result;
+    static int n;
+    static int result;
+    public int solution(int[] numbers, int target) {
+        n = numbers.length;
+        result = 0;
+        boolean[] selected = new boolean[n];
+        dfs(0, selected, target, numbers);
+        
+        int answer = result;
+        return answer;
     }
-
-    private static void dfs(int num, int depth, int[] numbers) {
-        if (depth == len) {
-            if (num==target_num){
-                result+=1;
+    
+    static void dfs(int depth, boolean[] selected, int target, int[] numbers) {
+        if (depth==n) {
+            // System.out.println(Arrays.toString(selected));
+            int tmp = 0;
+            
+            for (int i=0;i<n;i++) {
+                if (selected[i]) tmp+=numbers[i];
+                else tmp-=numbers[i];
+            }
+            
+            if (tmp==target) {
+                // System.out.println(Arrays.toString(selected));
+                result++;
             }
             return;
         }
-        dfs(num + numbers[depth], depth + 1, numbers);
-        dfs(num - numbers[depth], depth + 1, numbers);
+        selected[depth] = true;
+        dfs(depth+1, selected, target, numbers);
+        selected[depth] = false;
+        dfs(depth+1, selected, target, numbers);
     }
 }
