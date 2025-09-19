@@ -1,29 +1,22 @@
 class Solution {
-    static boolean[] visited;
-    static int size;
-    public static int solution(int n, int[][] computers) {
+    public int solution(int n, int[][] computers) {
         int answer = 0;
-
-        visited = new boolean[n];
-        size = n;
-
-        for (int i = 0; i < n; i++) {
+        boolean[] visited = new boolean[n];
+        for (int i=0;i<n;i++) {
             if (!visited[i]) {
-                dfs(i, computers);
-                answer+=1;
+                dfs(i, computers, visited);
+                answer++;
             }
         }
+        
         return answer;
     }
-
-    static void dfs(int start, int[][] computers) {
-        visited[start] = true;
-        for (int i = 0; i < size; i++) {
-            if ((i != start) && (computers[start][i] == 1)) {
-                if (!visited[i]) {
-                    dfs(i, computers);
-                }
-            }
+    
+    static void dfs(int node, int[][] comp, boolean[] visited) {
+        visited[node] = true;
+        
+        for (int i=0;i<comp.length;i++) {
+            if (comp[node][i] == 1 && !visited[i]) dfs(i, comp, visited);
         }
     }
 }
