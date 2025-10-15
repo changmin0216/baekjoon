@@ -1,63 +1,56 @@
 
 import java.io.*;
 import java.util.*;
-
-class Point {
-	int y, x, d;
-	
-	Point(int y, int x, int d) {
-		this.y = y;
-		this.x = x;
-		this.d = d;
-	}
-}
 public class Main {
-	public static void main(String args[]) throws IOException {
+	static int n, m;
+	static int[][] map;
+	
+	public static void main(String[] args) throws Exception {
+		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
-		
-		int n, m;
 		
 		st = new StringTokenizer(br.readLine());
 		n = Integer.parseInt(st.nextToken());
 		m = Integer.parseInt(st.nextToken());
 		
-		int[][] graph = new int[n][m];
-		boolean[][] visited = new boolean[n][m];
-		
+		map = new int[n][m];
 		for (int i=0;i<n;i++) {
-			String line = br.readLine();
-			
+			char[] c = br.readLine().toCharArray();
 			for (int j=0;j<m;j++) {
-				graph[i][j] = line.charAt(j) - '0';
+				map[i][j] = c[j]-'0';
 			}
-		}
+		}		
+		System.out.println(bfs());
+	}
+	
+	static int bfs() {
+		boolean[][] v = new boolean[n][m];
+		ArrayDeque<int[]> q = new ArrayDeque<>();
+		q.add(new int[] {0,0,1});
+		v[0][0] = true;
 		
-		Queue<Point> q = new LinkedList<>();
-		
-		q.add(new Point(0, 0, 1));
-		
-		int[] dy = {-1,1,0,0};
+		int[] dy = {1,-1,0,0};
 		int[] dx = {0,0,-1,1};
-		
-		while (!q.isEmpty()) {
-			Point now = q.poll();
+		while(!q.isEmpty()) {
+			int[] now = q.poll();
 			
-			if (now.y == n-1 && now.x == m-1) {
-				System.out.println(now.d);
+			if (now[0]==n-1 && now[1]==m-1) {
+				return now[2];
 			}
 			
 			for (int i=0;i<4;i++) {
-				int ny = now.y + dy[i];
-				int nx = now.x + dx[i];
+				int ny = now[0] + dy[i];
+				int nx = now[1] + dx[i];
 				
 				if (0<=ny && ny<n && 0<=nx && nx<m) {
-					if (graph[ny][nx] == 1 && !visited[ny][nx]) {
-						visited[ny][nx] = true;
-						q.add(new Point(ny, nx, now.d+1));
+					if (map[ny][nx]==1 && !v[ny][nx]) {
+						v[ny][nx] = true;
+						q.add(new int[] {ny, nx, now[2]+1});
 					}
 				}
 			}
 		}
+		return -1;
 	}
 }
