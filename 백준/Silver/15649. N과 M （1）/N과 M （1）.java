@@ -15,7 +15,6 @@ public class Main {
 		N = Integer.parseInt(st.nextToken());
 		R = Integer.parseInt(st.nextToken());
 		
-		//combination 문제
 		a = new int[N];
 		for (int i=1;i<=N;i++) {
 			a[i-1] = i; 
@@ -33,10 +32,9 @@ public class Main {
 				System.out.print(b[i]+" ");
 			}
 			System.out.println();
-//			System.out.println(Arrays.toString(b));
 			return;
 		}
-		for (int i = 0; i < N; i++) {
+		for (int i=0;i<N;i++) {
 			if (v[i]) continue;
 			v[i] = true;
 			b[cnt] = a[i];
