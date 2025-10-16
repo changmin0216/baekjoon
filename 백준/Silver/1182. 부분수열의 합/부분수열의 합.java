@@ -1,7 +1,7 @@
 
 import java.io.*;
 import java.util.*;
-public class Main {
+public class Main{
 	static int n, s;
 	static int[] arr, b;
 	static int result;
@@ -19,30 +19,44 @@ public class Main {
 		for (int i=0;i<n;i++) {
 			arr[i] = Integer.parseInt(st.nextToken());
 		}
-		b = new int[n];
-		result = 0;
-		for (int i=1;i<=n;i++) {
-			comb(0, 0, i);
-		}
+//		b = new int[n];
+//		result = 0;
+//		for (int i=1;i<=n;i++) {
+//			comb(0, 0, i);
+//		}
+		subset(0, 0);
+		if (s==0) result--;
 		System.out.println(result);
 	}
 	
-	static void comb(int cnt, int start, int r) {
-		if (cnt==r) {
-			int sum = 0;
-			for (int i=0;i<r;i++) {
-				sum+=b[i];
-			}
-			if (sum == s) {
-//				System.out.println(Arrays.toString(b));
+//	static void comb(int cnt, int start, int r) {
+//		if (cnt==r) {
+//			int sum = 0;
+//			for (int i=0;i<r;i++) {
+//				sum+=b[i];
+//			}
+//			if (sum == s) {
+////				System.out.println(Arrays.toString(b));
+//				result++;
+//			}
+//			return;
+//		}
+//		
+//		for (int i=start;i<n;i++) {
+//			b[cnt] = arr[i];
+//			comb(cnt+1, i+1, r);
+//		}
+//	}
+	
+	static void subset(int idx, int sum) {
+		if (idx == n) {
+			if (sum==s) {
 				result++;
 			}
 			return;
 		}
 		
-		for (int i=start;i<n;i++) {
-			b[cnt] = arr[i];
-			comb(cnt+1, i+1, r);
-		}
+		subset(idx+1, sum+arr[idx]);
+		subset(idx+1, sum);
 	}
 }
